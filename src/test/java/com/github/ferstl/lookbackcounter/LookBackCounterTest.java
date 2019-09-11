@@ -1,3 +1,5 @@
+package com.github.ferstl.lookbackcounter;
+
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

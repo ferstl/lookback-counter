@@ -1,3 +1,5 @@
+package com.github.ferstl.lookbackcounter;
+
 import java.util.Arrays;
 import java.util.function.LongSupplier;
 import static java.lang.Math.min;
@@ -26,7 +28,6 @@ public class LookBackCounter {
 
   public int get() {
     updateBuckets();
-
     return Arrays.stream(this.buckets).sum();
   }
 
