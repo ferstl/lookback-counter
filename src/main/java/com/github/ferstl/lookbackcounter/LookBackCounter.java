@@ -36,7 +36,7 @@ public class LookBackCounter {
     int lastPosition = (int) (this.lastTimestamp % this.lookBack);
     long elapsed = min(currentTimestamp - this.lastTimestamp, this.lookBack);
     // clear the buckets between the last position (exclusively) and now
-    for (int i = 1; i < elapsed; i++) {
+    for (int i = 1; i <= elapsed; i++) {
       this.buckets[(lastPosition + i) % this.lookBack] = 0;
     }
 
