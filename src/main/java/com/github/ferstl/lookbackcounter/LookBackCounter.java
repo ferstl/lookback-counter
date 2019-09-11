@@ -9,13 +9,13 @@ public class LookBackCounter {
   private final LongSupplier timestampSupplier;
   private final int lookBack;
 
-  private final int[] buckets;
+  private final long[] buckets;
   private long lastTimestamp;
 
   public LookBackCounter(LongSupplier timestampSupplier, int lookBack) {
     this.timestampSupplier = timestampSupplier;
     this.lookBack = lookBack;
-    this.buckets = new int[lookBack];
+    this.buckets = new long[lookBack];
     this.lastTimestamp = now();
   }
 
@@ -26,7 +26,7 @@ public class LookBackCounter {
     this.lastTimestamp = currentTimestamp;
   }
 
-  public int get() {
+  public long get() {
     updateBuckets();
     return Arrays.stream(this.buckets).sum();
   }
