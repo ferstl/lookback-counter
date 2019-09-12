@@ -20,7 +20,8 @@ public class LookBackCounter {
   }
 
   public void add(int nr) {
-    long currentTimestamp = updateBuckets();
+    long currentTimestamp = now();
+    updateBuckets(currentTimestamp);
     int currentPosition = (int) (currentTimestamp % this.lookBack);
     this.buckets[currentPosition] += nr;
     this.total += nr;
@@ -28,12 +29,11 @@ public class LookBackCounter {
   }
 
   public long get() {
-    updateBuckets();
+    updateBuckets(now());
     return this.total;
   }
 
-  private long updateBuckets() {
-    long currentTimestamp = now();
+  private void updateBuckets(long currentTimestamp) {
     int lastPosition = (int) (this.lastTimestamp % this.lookBack);
     long elapsed = min(currentTimestamp - this.lastTimestamp, this.lookBack);
     // clear the buckets between the last position (exclusively) and now
@@ -42,8 +42,6 @@ public class LookBackCounter {
       this.total -= this.buckets[index];
       this.buckets[index] = 0;
     }
-
-    return currentTimestamp;
   }
 
 
