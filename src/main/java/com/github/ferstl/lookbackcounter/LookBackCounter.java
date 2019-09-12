@@ -1,6 +1,5 @@
 package com.github.ferstl.lookbackcounter;
 
-import java.util.Arrays;
 import java.util.function.LongSupplier;
 import static java.lang.Math.min;
 
@@ -11,6 +10,7 @@ public class LookBackCounter {
 
   private final long[] buckets;
   private long lastTimestamp;
+  private long total;
 
   public LookBackCounter(LongSupplier timestampSupplier, int lookBack) {
     this.timestampSupplier = timestampSupplier;
@@ -23,12 +23,13 @@ public class LookBackCounter {
     long currentTimestamp = updateBuckets();
     int currentPosition = (int) (currentTimestamp % this.lookBack);
     this.buckets[currentPosition] += nr;
+    this.total += nr;
     this.lastTimestamp = currentTimestamp;
   }
 
   public long get() {
     updateBuckets();
-    return Arrays.stream(this.buckets).sum();
+    return this.total;
   }
 
   private long updateBuckets() {
@@ -37,7 +38,9 @@ public class LookBackCounter {
     long elapsed = min(currentTimestamp - this.lastTimestamp, this.lookBack);
     // clear the buckets between the last position (exclusively) and now
     for (int i = 1; i <= elapsed; i++) {
-      this.buckets[(lastPosition + i) % this.lookBack] = 0;
+      int index = (lastPosition + i) % this.lookBack;
+      this.total -= this.buckets[index];
+      this.buckets[index] = 0;
     }
 
     return currentTimestamp;
